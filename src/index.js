@@ -1,24 +1,14 @@
+// src/server.js
 const express = require('express');
 const app = express();
 const port = 3000;
 
-// Sample tasks array with 5 tasks
-const tasks = [
-  { id: 1, title: 'Learn Node.js', completed: false, priority: 'high', createdAt: new Date('2025-11-01T10:00:00Z') },
-  { id: 2, title: 'Build REST API', completed: false, priority: 'medium', createdAt: new Date('2025-11-02T11:30:00Z') },
-  { id: 3, title: 'Test API with Postman', completed: true, priority: 'low', createdAt: new Date('2025-11-03T09:15:00Z') },
-  { id: 4, title: 'Document API responses', completed: false, priority: 'medium', createdAt: new Date('2025-11-04T08:45:00Z') },
-  { id: 5, title: 'Deploy to production', completed: false, priority: 'high', createdAt: new Date('2025-11-04T12:00:00Z') }
-];
+// Import tasks routes
+const taskRoutes = require('./routes/tasks');
 
 // Root route
 app.get('/', (req, res) => {
   res.send('Task Management API is running!');
-});
-
-// Tasks route
-app.get('/tasks', (req, res) => {
-  res.json(tasks);
 });
 
 // Health check route
@@ -29,17 +19,8 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Get task by ID route
-app.get('/task/:id', (req, res) => {
-  const taskId = parseInt(req.params.id);
-  const task = tasks.find(t => t.id === taskId);
-
-  if (task) {
-    res.json(task);
-  } else {
-    res.status(404).json({ error: 'Task not found' });
-  }
-});
+// Mount task routes (under /tasks)
+app.use('/tasks', taskRoutes);
 
 // Start server
 app.listen(port, () => {
