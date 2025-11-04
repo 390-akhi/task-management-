@@ -21,6 +21,14 @@ app.get('/tasks', (req, res) => {
   res.json(tasks);
 });
 
+// Health check route
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    uptime: process.uptime()  // Returns how long the server has been running in seconds
+  });
+});
+
 // Start server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
