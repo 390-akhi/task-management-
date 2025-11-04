@@ -25,8 +25,20 @@ app.get('/tasks', (req, res) => {
 app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
-    uptime: process.uptime()  // Returns how long the server has been running in seconds
+    uptime: process.uptime()
   });
+});
+
+// Get task by ID route
+app.get('/task/:id', (req, res) => {
+  const taskId = parseInt(req.params.id);
+  const task = tasks.find(t => t.id === taskId);
+
+  if (task) {
+    res.json(task);
+  } else {
+    res.status(404).json({ error: 'Task not found' });
+  }
 });
 
 // Start server
